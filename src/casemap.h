@@ -1,5 +1,8 @@
 #ifndef CASEMAP_H
 #define CASEMAP_H
+
+#include <ncurses.h>
+
 typedef enum caseflags CaseFlags;
 enum caseflags {
 	MUR = 0,
@@ -19,6 +22,6 @@ struct caseMap {
 	enum caseflags flag;
 };
 
-void drawCase(CaseMap cm);
+void drawCase(CaseMap cm, WINDOW* win);
 char getCharRepresentation(CaseMap cm);
 #endif

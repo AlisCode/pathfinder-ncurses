@@ -14,13 +14,13 @@ char charRepresentation[8] = {
 }; 
 
 // Affiche la case passée en paramètre dans la fenêtre ncurses
-void drawCase(CaseMap cm) {
+void drawCase(CaseMap cm, WINDOW* win) {
 	
 	// Crée un string affichable à partir du char dans le tableau
 	char c[2];
 	c[0] = getCharRepresentation(cm);
 	c[1] = '\0'; 
-	mvprintw(cm.x, cm.y, c);
+	mvwprintw(win, cm.y, cm.x, c);
 }
 
 // Obtient la représentation sous forme de char de la case donnée

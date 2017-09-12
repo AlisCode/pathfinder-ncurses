@@ -1,12 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <ncurses.h>
 #include "map.h"
 #include "casemap.h"
 #include "pathfindermath.h"
-
-void drawMap(Map m) {
-
-}
 
 Map createMap(char* name, int w, int h) {
 	
@@ -26,7 +23,7 @@ Map createMap(char* name, int w, int h) {
 		CaseMap cm;
 		cm.x = (i % w)+1;
 		cm.y = (i / w)+1;
-		cm.flag = MUR;
+		cm.flag = VIDE;
 		addCase(&m, cm);	
 	}
 
@@ -99,23 +96,25 @@ Map loadMap(char* filename) {
 		sscanf(buffer, "%d", &flag); 
 		int x = (i%width)+1;
 		int y = (i/width)+1;
-		changeFlag(&m,y,x,flag);
+		changeFlag(&m,x,y,flag);
 	}
 
 	fclose(fichier);
 	return m;
 }
 
-void displayMap(Map m) {
+void displayMap(Map m, int cursorX, int cursorY, WINDOW* win) {
 	int i;
+	int indexCursor = getArrayIndexFromXYPos(cursorX, cursorY, m.width);
 	for(i = 0 ; i < m.nbCases ; i++) {
-		drawCase(m.cases[i]);	
+		if(i == indexCursor) { wattron( win, A_REVERSE); }
+		drawCase(m.cases[i], win);	
+		if(i == indexCursor) { wattroff( win, A_REVERSE); }
 	}
 }
 
 void addCase(Map* m, CaseMap cm) {
 
 	int index = getArrayIndexFromXYPos(cm.x,cm.y,m->width);	
-	fprintf(stderr, "index: %d\n", index);
 	m->cases[index] = cm;
 }
