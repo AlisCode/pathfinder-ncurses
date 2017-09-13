@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ncurses.h>
 #include "casemap.h"
 #include "map.h"
 #include "menu.h"
 #include "mapwindow.h"
+#include "pathfinding.h"
 
 void actionMenu(int opt);
 
@@ -94,6 +96,7 @@ void actionMenu(int opt) {
 			break;
 		// Resolve
 		case 3:
+			resolvePath(mapWindow.map);
 			break;
 		// Quit
 		case 4:

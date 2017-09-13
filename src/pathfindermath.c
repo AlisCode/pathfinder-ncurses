@@ -9,9 +9,9 @@ int getArrayIndexFromXYPos(int x, int y, int arrayW) {
 
 
 // Retourne la distance entre deux points (PathfindingNode)
-float calcDistance(PathfindingNode depart, PathfindingNode arrivee) {
-	int dx = arrivee.x - depart.x;
-	int dy = arrivee.y - depart.y;
+float calcDistance(PathfindingNode* depart, PathfindingNode* arrivee) {
+	int dx = arrivee->x - depart->x;
+	int dy = arrivee->y - depart->y;
 
 	return sqrtf(dx*dx + dy*dy);
 }

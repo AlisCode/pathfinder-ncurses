@@ -118,3 +118,27 @@ void addCase(Map* m, CaseMap cm) {
 	int index = getArrayIndexFromXYPos(cm.x,cm.y,m->width);	
 	m->cases[index] = cm;
 }
+
+CaseMap* getStartingPoint(Map m) {
+	
+	int i;
+	for(i = 0 ; i < m.nbCases ; i++) {
+		if(m.cases[i].flag == DEPART) {
+			return &m.cases[i];
+		}
+	}
+
+	return NULL;
+}
+
+CaseMap* getEndingPoint(Map m) {
+
+	int i;
+	for(i = 0 ; i < m.nbCases ; i++) {
+		if(m.cases[i].flag == ARRIVEE) {
+			return &m.cases[i];
+		}
+	}
+
+	return NULL;
+}

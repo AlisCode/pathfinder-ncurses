@@ -21,4 +21,7 @@ void freeMap(Map* m);
 CaseMap getCase(Map m, int x, int y);
 void setCase(Map* m, CaseMap cm);
 void changeFlag(Map* m,int x, int y, CaseFlags flag);
+CaseMap* getStartingPoint(Map m);
+CaseMap* getEndingPoint(Map m);
+
 #endif

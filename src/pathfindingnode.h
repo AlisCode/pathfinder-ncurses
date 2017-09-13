@@ -1,12 +1,15 @@
 #ifndef PATHFINDINGNODE_H
 #define PATHFINDINGNODE_H
 
+#include "casemap.h"
+
 typedef struct pathfindingNode PathfindingNode;
 typedef struct pathfindingNodeList PathfindingNodeList;
 
 struct pathfindingNode {
 	int x;
 	int y;
+	int isAnchor;
 	PathfindingNode* parent;
 	
 	float gCost;
@@ -14,7 +17,8 @@ struct pathfindingNode {
 	float fCost;
 };
 
-float calcCost(PathfindingNode* pn, PathfindingNode target, PathfindingNode begin);
+PathfindingNode createNodeFromCaseMap(CaseMap* cm);
+void calcCost(PathfindingNode* pn, PathfindingNode target, PathfindingNode begin);
 void setParent(PathfindingNode* pn, PathfindingNode* parent);
 PathfindingNode* getParent(PathfindingNode pn);
 
@@ -25,7 +29,8 @@ struct pathfindingNodeList {
 };
 
 PathfindingNodeList createPathfindingNodeList();
-void addToNodeList(PathfindingNodeList* pnl, PathfindingNode* pn);
+void addToNodeList(PathfindingNodeList* pnl, PathfindingNode pn);
 void removeFromNodeList(PathfindingNodeList* pnl, int index);
+int nodeListContains(PathfindingNodeList* pnl, PathfindingNode* pn);
 
 #endif
