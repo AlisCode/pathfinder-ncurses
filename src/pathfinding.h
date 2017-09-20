@@ -6,6 +6,9 @@
 #include "pathfindingnode.h"
 
 
+PathfindingNodeList* constructPath(PathfindingNode* end);
 PathfindingNodeList* findPath(Map m);
+void addNeighbours(PathfindingNodeList* openList, PathfindingNodeList* closedList, PathfindingNode pn, Map m);
+void resolvePath(Map m);
 
 #endif

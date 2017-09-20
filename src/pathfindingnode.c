@@ -13,8 +13,8 @@ void calcCost(PathfindingNode* pn, PathfindingNode target, PathfindingNode begin
 	// Coût vers le point d'arrivée
 	float hcost = calcDistance(pn, &target);
 	
-	// Produit des deux précédents
-	float fcost = gcost*hcost;
+	// Somme des deux coûts précédents
+	float fcost = gcost+hcost;
 	
 	// Affecte les coûts calculés à la structure
 	pn->gCost = gcost;
@@ -27,6 +27,15 @@ void setParent(PathfindingNode* pn, PathfindingNode* parent) {
 	pn->parent = parent;
 }
 
+// Vérifie si deux noeuds sont égaux ou non en terme de position
+int nodeEquals(PathfindingNode n1, PathfindingNode n2) {
+	if(n1.x == n2.x && n1.y == n2.y) {
+		return 1;
+	}
+
+	return 0;
+}
+
 // Récupère le pointeur vers le parent du noeud concerné 
 PathfindingNode* getParent(PathfindingNode pn) {
 	return pn.parent;
@@ -34,13 +43,14 @@ PathfindingNode* getParent(PathfindingNode pn) {
 
 // Crée un PathfindingNode depuis une CaseMap 
 PathfindingNode createNodeFromCaseMap(CaseMap* cm) {
+
 	PathfindingNode pn;
 
 	pn.x = cm->x;
 	pn.y = cm->y;
 	
 	pn.parent = NULL;
-	pn.isAnchor = 0;
+
 	pn.gCost = 0;
 	pn.hCost = 0;
 	pn.fCost = 0;
@@ -71,7 +81,7 @@ void addToNodeList(PathfindingNodeList* pnl, PathfindingNode pn) {
 	// Si notre liste est déjà complète
 	if(pnl->taille == pnl->tailleUtilisee) {
 		// On ajoute de la place pour stocker 10 noeuds
-		pnl->nodes = realloc(pnl->nodes, sizeof(PathfindingNode) * 10);
+		pnl->nodes = realloc(pnl->nodes, pnl->taille * sizeof(PathfindingNode) + sizeof(PathfindingNode) * 10);
 		pnl->taille += 10;
 	}
 
@@ -102,12 +112,13 @@ void freeNodeList(PathfindingNodeList* pnl) {
 	free(pnl->nodes);
 }
 
-int nodeListContains(PathfindingNodeList* pnl, PathfindingNode* pn) {
+// Vérifie si le noeud donné est contenu dans la liste ou non
+int nodeListContains(PathfindingNodeList* pnl, PathfindingNode pn) {
 
 	int i;
 	for(i = 0 ; i < pnl->taille ; i++)
 	{
-		if(pnl->nodes[i].x == pn->x && pnl->nodes[i].y == pn->y) {
+		if(pnl->nodes[i].x == pn.x && pnl->nodes[i].y == pn.y) {
 			return 1;
 		}
 	}
