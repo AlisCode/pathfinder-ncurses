@@ -118,7 +118,9 @@ int nodeListContains(PathfindingNodeList* pnl, PathfindingNode pn) {
 	int i;
 	for(i = 0 ; i < pnl->taille ; i++)
 	{
+		//fprintf(stderr, "comparing %d %d and %d %d\n", pn.x, pn.y, pnl->nodes[i].x, pnl->nodes[i].y);
 		if(pnl->nodes[i].x == pn.x && pnl->nodes[i].y == pn.y) {
+			fprintf(stderr, "found similarity");
 			return 1;
 		}
 	}

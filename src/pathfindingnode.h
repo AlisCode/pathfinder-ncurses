@@ -33,6 +33,7 @@ struct pathfindingNodeList {
 PathfindingNodeList createPathfindingNodeList();
 void addToNodeList(PathfindingNodeList* pnl, PathfindingNode pn);
 void removeFromNodeList(PathfindingNodeList* pnl, int index);
+void freeNodeList(PathfindingNodeList* pnl);
 int nodeListContains(PathfindingNodeList* pnl, PathfindingNode pn);
 
 #endif
