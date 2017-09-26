@@ -15,37 +15,35 @@ PathfindingNodeList findPath(Map m) {
         return createPathfindingNodeList();
     }
 
-    PathfindingNode startPn = createNodeFromCaseMap(startCm);
-    PathfindingNode endPn = createNodeFromCaseMap(endCm);
+    PathfindingNode* startPn = createNodeFromCaseMap(startCm);
+    PathfindingNode* endPn = createNodeFromCaseMap(endCm);
 
     PathfindingNodeList openList = createPathfindingNodeList();
     PathfindingNodeList closedList = createPathfindingNodeList();
 
     addToNodeList(&openList, startPn);
-    //fprintf(stderr, "tout est initialise\n");
     int tourBoucle = 1;
     while(openList.tailleUtilisee > 0) {
         
-        //fprintf(stderr, "tour de boucle %d\n", tourBoucle);
         tourBoucle++;
-        // Dépile le premier élément de la liste
-        PathfindingNode pn = openList.nodes[0];
-        removeFromNodeList(&openList, 0);
         
-        // Si le noeud qu'on visite est le noeud d'arrivée, le chemin est trouvé
+	// Dépile le premier élément de la liste et l'ajoute dans la ClosedList
+        PathfindingNode* pn = openList.nodes[0];
+        removeFromNodeList(&openList, 0);
+        addToNodeList(&closedList, pn);
+        
+	// Si le noeud qu'on visite est le noeud d'arrivée, le chemin est trouvé
         if(nodeEquals(pn, endPn)) {
             fprintf(stderr, "construction du chemin...\n");
             // On retourne le chemin construit à partir de l'arrivée
-            freeNodeList(&openList);
-            freeNodeList(&closedList);
-            return constructPath(&pn);
-        }
+                PathfindingNodeList path = constructPath(pn);
+		freeNodeList(&openList);
+            	freeNodeList(&closedList);
+		return path;
+	 }
 
         // Ajoute les voisins
         addNeighbours(&openList, &closedList, pn, m);
-
-        // Ajoute le noeud visité dans la closedList
-        addToNodeList(&closedList, pn);
 
         // Et on recommence ....
     }
@@ -66,7 +64,7 @@ void resolvePath(Map m) {
         int i; 
         for(i = 0 ; i < pnl.tailleUtilisee ; i++)
         {
-            fprintf(stderr, "x : %d, y : %d;\n", pnl.nodes[i].x, pnl.nodes[i].y);
+            fprintf(stderr, "x : %d, y : %d;\n", pnl.nodes[i]->x, pnl.nodes[i]->y);
         }
         fprintf(stderr, "}\n");
     }
@@ -75,13 +73,10 @@ void resolvePath(Map m) {
 PathfindingNodeList constructPath(PathfindingNode* end) {
 
     PathfindingNodeList path = createPathfindingNodeList();
-    //fprintf(stderr, "Adding first node");
-    addToNodeList(&path, *end);
 
     PathfindingNode* current = end;
     while(current != NULL) {
-        //fprintf(stderr, "Adding a node %d %d", current->x, current->y);
-        addToNodeList(&path, *current);
+        addToNodeList(&path, current);
         current = current->parent;
     }
 
@@ -89,62 +84,44 @@ PathfindingNodeList constructPath(PathfindingNode* end) {
     return path;
 }
 
-void addNeighbours(PathfindingNodeList* openList, PathfindingNodeList* closedList, PathfindingNode pn, Map m) {
+void addNeighbours(PathfindingNodeList* openList, PathfindingNodeList* closedList, PathfindingNode* pn, Map m) {
 
-    // Ajoute le voisin gauche
-    int lx = pn.x-1;
-    int ly = pn.y;
-    if(lx > 0 && lx <= m.width ) { 
-        CaseMap lcm = getCase(m, lx, ly);
-        PathfindingNode lpn = createNodeFromCaseMap(&lcm);
-        if(lcm.flag != MUR && 
-        nodeListContains(closedList, lpn) == 0 && 
-        nodeListContains(openList, lpn) == 0) {
-            setParent(&lpn, &pn);
-            addToNodeList(openList, lpn);   
-        }
-    }
-    
-    // Ajoute le voisin droit
-    int rx = pn.x+1;
-    int ry = pn.y;
-    if(rx > 0 && rx <= m.width ) { 
-        CaseMap rcm = getCase(m, rx, ry);
-        PathfindingNode rpn = createNodeFromCaseMap(&rcm);
-        if(rcm.flag != MUR && 
-        nodeListContains(closedList, rpn) == 0 &&
-        nodeListContains(openList, rpn) == 0) {
-            setParent(&rpn, &pn);
-            addToNodeList(openList, rpn);   
-        }
-    }
-    
-    // Ajoute le voisin du dessus
-    int ux = pn.x;
-    int uy = pn.y-1;
-    if(uy > 0 && uy <= m.height ) { 
-        CaseMap ucm = getCase(m, ux, uy);
-        PathfindingNode upn = createNodeFromCaseMap(&ucm);
-        if(ucm.flag != MUR && 
-        nodeListContains(closedList, upn) == 0 && 
-        nodeListContains(openList, upn) == 0) {
-            setParent(&upn, &pn);
-            addToNodeList(openList, upn);   
-        }
-    }
-    
-    // Ajoute le voisin du dessous
-    int dx = pn.x; 
-    int dy = pn.y+1;
-    if(dx > 0 && dx <= m.height ) { 
-        CaseMap dcm = getCase(m, dx, dy);
-        PathfindingNode dpn = createNodeFromCaseMap(&dcm);
-        if(dcm.flag != MUR && 
-        nodeListContains(closedList, dpn) == 0 && 
-        nodeListContains(openList, dpn) == 0) {
-            setParent(&dpn, &pn);
-            addToNodeList(openList, dpn);   
-        }
-    }
+    	// Ajoute le voisin gauche
+	addNeighbour(openList, closedList, m, -1, 0, pn);  
+ 
+	// Ajoute le voisin droit
+	addNeighbour(openList, closedList, m, 1, 0, pn);  
+   
+    	// Ajoute le voisin du dessus
+	addNeighbour(openList, closedList, m, 0, -1, pn);  
+   	
+	// Ajoute le voisin du dessous
+	addNeighbour(openList, closedList, m, 0, 1, pn);   
     
 }
+
+
+void addNeighbour(PathfindingNodeList* openList, PathfindingNodeList* closedList, Map m, int offsetX, int offsetY, PathfindingNode* pn) {
+	//fprintf(stderr,"1\n");
+	int nx = pn->x + offsetX; 
+    	int ny = pn->y + offsetY;
+	//fprintf(stderr,"2\n");
+
+    	if(nx > 0 && nx <= m.width && ny > 0 && ny <= m.height ) { 
+        	//fprintf(stderr,"3\n");
+		CaseMap ncm = getCase(m, nx, ny);
+	        //fprintf(stderr,"4\n");	
+		PathfindingNode* npn = createNodeFromCaseMap(&ncm);
+        	//fprintf(stderr,"5\n");
+		if(ncm.flag != MUR && 
+		nodeListContains(closedList, npn) == 0 && 
+		nodeListContains(openList, npn) == 0) {
+		    //fprintf(stderr,"6\n");
+			setParent(npn, pn);
+		    //fprintf(stderr,"7\n");
+			addToNodeList(openList, npn);   
+		}
+   	 }
+	//fprintf(stderr,"8\n");
+}
+

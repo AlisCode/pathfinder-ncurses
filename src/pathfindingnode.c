@@ -2,6 +2,8 @@
 #include "pathfindermath.h"
 #include <stdlib.h>
 
+#define PLACE_MEMOIRE 2
+
 // FONCTIONS UTILITAIRES POUR LES PATHFINDINGNODE
 
 // Calcule les coûts dont l'algorithme A* a besoin
@@ -28,8 +30,8 @@ void setParent(PathfindingNode* pn, PathfindingNode* parent) {
 }
 
 // Vérifie si deux noeuds sont égaux ou non en terme de position
-int nodeEquals(PathfindingNode n1, PathfindingNode n2) {
-	if(n1.x == n2.x && n1.y == n2.y) {
+int nodeEquals(PathfindingNode* n1, PathfindingNode* n2) {
+	if(n1->x == n2->x && n1->y == n2->y) {
 		return 1;
 	}
 
@@ -37,25 +39,31 @@ int nodeEquals(PathfindingNode n1, PathfindingNode n2) {
 }
 
 // Récupère le pointeur vers le parent du noeud concerné 
-PathfindingNode* getParent(PathfindingNode pn) {
-	return pn.parent;
+PathfindingNode* getParent(PathfindingNode* pn) {
+	return pn->parent;
 }
 
 // Crée un PathfindingNode depuis une CaseMap 
-PathfindingNode createNodeFromCaseMap(CaseMap* cm) {
+PathfindingNode* createNodeFromCaseMap(CaseMap* cm) {
 
-	PathfindingNode pn;
-
-	pn.x = cm->x;
-	pn.y = cm->y;
+	PathfindingNode* pn = malloc(sizeof(PathfindingNode));
 	
-	pn.parent = NULL;
+	if(pn == NULL) {
+		fprintf(stderr, "Plus de mémoire disponible !");
+		exit(PLACE_MEMOIRE);	
+	}
 
-	pn.gCost = 0;
-	pn.hCost = 0;
-	pn.fCost = 0;
+	pn->x = cm->x;
+	pn->y = cm->y;
+	
+	pn->parent = NULL;
+
+	pn->gCost = 0;
+	pn->hCost = 0;
+	pn->fCost = 0;
 
 	return pn;
+
 }
 
 // FONCTIONS UTILITAIRES POUR LES LISTES DE PATHFINDINGNODE
@@ -76,12 +84,21 @@ PathfindingNodeList createPathfindingNodeList() {
 }
 
 // Ajoute un noeud à une liste dont la mémoire est gérée dynamiquement
-void addToNodeList(PathfindingNodeList* pnl, PathfindingNode pn) {
+void addToNodeList(PathfindingNodeList* pnl, PathfindingNode* pn) {
 	
 	// Si notre liste est déjà complète
 	if(pnl->taille == pnl->tailleUtilisee) {
+		fprintf(stderr,"reallocation du tableaui %p\n",pnl->nodes);
+
 		// On ajoute de la place pour stocker 10 noeuds
 		pnl->nodes = realloc(pnl->nodes, pnl->taille * sizeof(PathfindingNode) + sizeof(PathfindingNode) * 10);
+		
+		fprintf(stderr,"nouveau pointeur %p\n",pnl->nodes);
+		
+		// Si la réallocation a échoué
+		if(pnl->nodes == NULL) { 
+			exit(PLACE_MEMOIRE);
+		}
 		pnl->taille += 10;
 	}
 
@@ -113,14 +130,12 @@ void freeNodeList(PathfindingNodeList* pnl) {
 }
 
 // Vérifie si le noeud donné est contenu dans la liste ou non
-int nodeListContains(PathfindingNodeList* pnl, PathfindingNode pn) {
+int nodeListContains(PathfindingNodeList* pnl, PathfindingNode* pn) {
 
 	int i;
-	for(i = 0 ; i < pnl->taille ; i++)
+	for(i = 0 ; i < pnl->tailleUtilisee ; i++)
 	{
-		//fprintf(stderr, "comparing %d %d and %d %d\n", pn.x, pn.y, pnl->nodes[i].x, pnl->nodes[i].y);
-		if(pnl->nodes[i].x == pn.x && pnl->nodes[i].y == pn.y) {
-			fprintf(stderr, "found similarity");
+		if(pnl->nodes[i]->x == pn->x && pnl->nodes[i]->y == pn->y) {
 			return 1;
 		}
 	}

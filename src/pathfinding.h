@@ -8,7 +8,8 @@
 
 PathfindingNodeList constructPath(PathfindingNode* end);
 PathfindingNodeList findPath(Map m);
-void addNeighbours(PathfindingNodeList* openList, PathfindingNodeList* closedList, PathfindingNode pn, Map m);
+void addNeighbours(PathfindingNodeList* openList, PathfindingNodeList* closedList, PathfindingNode* pn, Map m);
+void addNeighbour(PathfindingNodeList* openList, PathfindingNodeList* closedList, Map m, int offsetX, int offsetY, PathfindingNode* pn);
 void resolvePath(Map m);
 
 #endif
