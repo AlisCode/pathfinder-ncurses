@@ -6,11 +6,13 @@
 #include "menu.h"
 #include "mapwindow.h"
 #include "pathfinding.h"
+#include "stateview.h"
 
 void actionMenu(int opt);
 
 int running = 0;
 MapWindow mapWindow;
+StateView stateView;
 
 int main(int argc, char* argv[]) {
 	
@@ -54,6 +56,9 @@ int main(int argc, char* argv[]) {
 	// Crée le menu
 	Menu menu = createMenu(maxX, maxY);
 
+	// Crée la StateView
+	stateView = createStateView(maxX, maxY);
+
 	// Boucle principale
 	running = 1;
 	while(running == 1) {
@@ -61,10 +66,11 @@ int main(int argc, char* argv[]) {
 		refresh();
 		drawMapWindow(&mapWindow);
 		updateMapWindow(&mapWindow);	
-	
+		updateStateView(&stateView, "VISUAL - m to open menu");	
 		int userInput = getch();
 		switch(userInput) {
 			case 'm':
+				updateStateView(&stateView, "ESC to close");
 				toggleMenu(&menu);
 				break;
 			case 'o':	

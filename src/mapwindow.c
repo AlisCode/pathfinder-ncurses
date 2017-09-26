@@ -5,7 +5,7 @@
 MapWindow createMapWindow(int maxX, int maxY) {
 	MapWindow mw;
 	
-	mw.window = newwin(maxY-1,maxX-1,0,0);
+	mw.window = newwin(maxY-3,maxX-1,2,0);
 	mw.editMode = 0;
 	mw.cursorX = 0;
 	mw.cursorY = 0;

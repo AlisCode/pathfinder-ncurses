@@ -66,6 +66,8 @@ void displayMenu(Menu* m) {
 			case 'm':
 				toggleMenu(m);
 				break;
+			case 27:
+				toggleMenu(m);
 			case 10:
 				m->validatedOption = m->chosenOption;
 				toggleMenu(m);

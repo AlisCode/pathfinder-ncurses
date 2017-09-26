@@ -132,9 +132,9 @@ void addCase(Map* m, CaseMap cm) {
 
 void normalizeMap(Map* m) {
 	int x, y;
-	for(x = 0 ; x < m->width ; x++) 
+	for(x = 0 ; x <= m->width ; x++) 
 	{
-		for(y = 0 ; y < m->height ; y++)
+		for(y = 0 ; y <= m->height ; y++)
 		{	
 			int flag = getCase(*m, x,y).flag;
 			if(flag == CHEMIN_LEFT 
