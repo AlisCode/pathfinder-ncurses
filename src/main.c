@@ -39,7 +39,14 @@ int main(int argc, char* argv[]) {
 	curs_set(FALSE);
 	getmaxyx(stdscr, maxY, maxX);
 	refresh();
-		
+
+	// Initialise les couleurs
+	start_color();
+	init_pair(1, COLOR_BLACK, COLOR_WHITE);
+	init_pair(2, COLOR_BLACK, COLOR_RED);
+	init_pair(3, COLOR_BLACK, COLOR_YELLOW);
+	init_pair(4, COLOR_BLACK, COLOR_GREEN);
+
 	// Crée la fenêtre pour la map
 	mapWindow = createMapWindow(maxX, maxY);
 	replaceMap(&mapWindow, map);
@@ -89,6 +96,7 @@ void actionMenu(int opt) {
 			break;
 		// Save	
 		case 1:
+			normalizeMap(&mapWindow.map);
 			saveMap(mapWindow.map);
 			break;
 		// Load 
@@ -96,6 +104,7 @@ void actionMenu(int opt) {
 			break;
 		// Resolve
 		case 3:
+			normalizeMap(&mapWindow.map);
 			resolvePath(mapWindow.map);
 			break;
 		// Quit

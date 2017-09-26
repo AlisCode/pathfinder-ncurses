@@ -17,6 +17,7 @@ void saveMap(Map m);
 Map loadMap(char* filename);
 void displayMap(Map m, int cursorX, int cursorY, WINDOW* win);
 void addCase(Map* m, CaseMap cm);
+void normalizeMap(Map* m);
 void freeMap(Map* m);
 CaseMap getCase(Map m, int x, int y);
 void setCase(Map* m, CaseMap cm);

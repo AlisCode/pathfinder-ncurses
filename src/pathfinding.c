@@ -55,19 +55,46 @@ PathfindingNodeList findPath(Map m) {
 }
 
 void resolvePath(Map m) {
-    PathfindingNodeList pnl = findPath(m);
 
-    fprintf(stderr, "ended call to findPath");
-    if(pnl.taille != 0)
-    {
-        fprintf(stderr, "\n path found : {\n");
-        int i; 
-        for(i = 0 ; i < pnl.tailleUtilisee ; i++)
-        {
-            fprintf(stderr, "x : %d, y : %d;\n", pnl.nodes[i]->x, pnl.nodes[i]->y);
-        }
-        fprintf(stderr, "}\n");
-    }
+	// Résouds le chemin
+	PathfindingNodeList pnl = findPath(m);
+
+	// Si on a trouvé une solution
+    	if(pnl.taille != 0)
+	{
+		int i; 
+		// On parcourt tout le tableau (sauf la dernière et la première case)
+		for(i = 1 ; i < pnl.tailleUtilisee-1 ; i++)
+		{
+			// Si on a une case après
+			if(i-1 >= 0)
+			{
+				int dx = pnl.nodes[i]->x - pnl.nodes[i-1]->x;
+				int dy = pnl.nodes[i]->y - pnl.nodes[i-1]->y;
+				
+				// NB : Comme le chemin est reconstruit à l'envers (en partant du point d'arrivée, on inverse le sens pour déduire le déplacement entre deux points)
+				// Si on se déplace vers la droite
+				if(dx < 0) {
+					changeFlag(&m, pnl.nodes[i]->x, pnl.nodes[i]->y, CHEMIN_RIGHT);				
+				}
+				// Si on se déplace vers la gauche
+				else if(dx > 0) {
+					changeFlag(&m, pnl.nodes[i]->x, pnl.nodes[i]->y, CHEMIN_LEFT);				
+				}
+				// Si on se déplace vers le haut
+				else if(dy > 0) {
+					changeFlag(&m, pnl.nodes[i]->x, pnl.nodes[i]->y, CHEMIN_UP);			
+				}
+				// Si on se déplace vers le bas
+				else if(dy < 0) {
+					changeFlag(&m, pnl.nodes[i]->x, pnl.nodes[i]->y, CHEMIN_DOWN);	
+				}
+			}
+		}
+	}
+	else {
+		// sinon, on affiche qu'on a eu une erreur 	
+	}
 }
 
 PathfindingNodeList constructPath(PathfindingNode* end) {
@@ -102,26 +129,18 @@ void addNeighbours(PathfindingNodeList* openList, PathfindingNodeList* closedLis
 
 
 void addNeighbour(PathfindingNodeList* openList, PathfindingNodeList* closedList, Map m, int offsetX, int offsetY, PathfindingNode* pn) {
-	//fprintf(stderr,"1\n");
 	int nx = pn->x + offsetX; 
     	int ny = pn->y + offsetY;
-	//fprintf(stderr,"2\n");
 
     	if(nx > 0 && nx <= m.width && ny > 0 && ny <= m.height ) { 
-        	//fprintf(stderr,"3\n");
 		CaseMap ncm = getCase(m, nx, ny);
-	        //fprintf(stderr,"4\n");	
 		PathfindingNode* npn = createNodeFromCaseMap(&ncm);
-        	//fprintf(stderr,"5\n");
 		if(ncm.flag != MUR && 
 		nodeListContains(closedList, npn) == 0 && 
 		nodeListContains(openList, npn) == 0) {
-		    //fprintf(stderr,"6\n");
 			setParent(npn, pn);
-		    //fprintf(stderr,"7\n");
 			addToNodeList(openList, npn);   
 		}
    	 }
-	//fprintf(stderr,"8\n");
 }
 

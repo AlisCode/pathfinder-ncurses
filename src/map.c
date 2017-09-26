@@ -5,6 +5,7 @@
 #include "casemap.h"
 #include "pathfindermath.h"
 
+// Crée une carte à partir de son nom, sa taille (Width, Height)
 Map createMap(char* name, int w, int h) {
 	
 	Map m;
@@ -35,22 +36,27 @@ void freeMap(Map* m) {
 	free(m->cases);
 }
 
+// Récupère la case aux coordonnées (X,Y)
 CaseMap getCase(Map m, int x, int y) {
 	int index = getArrayIndexFromXYPos(x,y,m.width);
 	return m.cases[index];
 }
 
+// Change la case aux coordonnées (X,Y)
 void setCase(Map* m, CaseMap cm) {
 	int index = getArrayIndexFromXYPos(cm.x,cm.y, m->width);
 	m->cases[index] = cm;
 }
 
+// Change le contenu de la case aux coordonnées (X,Y)
 void changeFlag(Map* m, int x, int y, CaseFlags flag) {
 	int index = getArrayIndexFromXYPos(x,y,m->width);
 	m->cases[index].flag = flag;
 }
 
+// Sauvegarde la carte dans un fichier portant son nom
 void saveMap(Map m) {
+	
 	FILE* fichier = fopen(m.name, "w");
 	if(fichier == NULL) {
 		fprintf(stderr, "Erreur lors de l'ouverture du fichier pour la sauvegarde");
@@ -69,6 +75,7 @@ void saveMap(Map m) {
 	fclose(fichier);
 }
 
+// Charge une carte dans l'application
 Map loadMap(char* filename) {
 	FILE* fichier = fopen(filename, "r");
 	if(fichier == NULL) {
@@ -103,9 +110,11 @@ Map loadMap(char* filename) {
 	return m;
 }
 
+// Affiche une carte sur l'écran
 void displayMap(Map m, int cursorX, int cursorY, WINDOW* win) {
 	int i;
 	int indexCursor = getArrayIndexFromXYPos(cursorX, cursorY, m.width);
+	start_color();
 	for(i = 0 ; i < m.nbCases ; i++) {
 		if(i == indexCursor) { wattron( win, A_REVERSE); }
 		drawCase(m.cases[i], win);	
@@ -113,12 +122,33 @@ void displayMap(Map m, int cursorX, int cursorY, WINDOW* win) {
 	}
 }
 
+
+// Ajoute une case dans une carte
 void addCase(Map* m, CaseMap cm) {
 
 	int index = getArrayIndexFromXYPos(cm.x,cm.y,m->width);	
 	m->cases[index] = cm;
 }
 
+void normalizeMap(Map* m) {
+	int x, y;
+	for(x = 0 ; x < m->width ; x++) 
+	{
+		for(y = 0 ; y < m->height ; y++)
+		{	
+			int flag = getCase(*m, x,y).flag;
+			if(flag == CHEMIN_LEFT 
+			|| flag == CHEMIN_RIGHT
+			|| flag == CHEMIN_UP
+			|| flag == CHEMIN_DOWN) {
+				changeFlag(m, x, y, VIDE);
+			}
+		}	
+	}
+}
+
+
+// Récupère la case "point de départ" d'une carte
 CaseMap* getStartingPoint(Map m) {
 	
 	int i;
@@ -131,6 +161,7 @@ CaseMap* getStartingPoint(Map m) {
 	return NULL;
 }
 
+// Récupère la case "point d'arrivée" d'une carte
 CaseMap* getEndingPoint(Map m) {
 
 	int i;

@@ -9,9 +9,22 @@ char charRepresentation[8] = {
 	'A',
 	'<',
 	'>',
-	'|',
-	'|'
+	'^',
+	'v'
 }; 
+
+
+// Tableau permettant de stocker la couleur d'une case dans la map
+int charColor[8] = {
+	2,
+	1,
+	3,
+	3,
+	4,
+	4,
+	4,
+	4	
+};
 
 // Affiche la case passée en paramètre dans la fenêtre ncurses
 void drawCase(CaseMap cm, WINDOW* win) {
@@ -20,7 +33,10 @@ void drawCase(CaseMap cm, WINDOW* win) {
 	char c[2];
 	c[0] = getCharRepresentation(cm);
 	c[1] = '\0'; 
+	
+	wattron(win, COLOR_PAIR(charColor[cm.flag]));
 	mvwprintw(win, cm.y, cm.x, c);
+	wattroff(win, COLOR_PAIR(charColor[cm.flag]));
 }
 
 // Obtient la représentation sous forme de char de la case donnée
