@@ -56,8 +56,10 @@ PathfindingNodeList findPath(Map m) {
 
 void resolvePath(Map m) {
 
+	fprintf(stderr, "recherche de chemin \n");
 	// Résouds le chemin
 	PathfindingNodeList pnl = findPath(m);
+	fprintf(stderr, "chemin trouvé \n");
 
 	// Si on a trouvé une solution
     	if(pnl.taille != 0)

@@ -63,7 +63,7 @@ void updateMenuEdition(MenuEdition* me) {
 				break;
 			case KEY_DOWN:
 				me->chosenOption++;
-				if(me->chosenOption > 4) { me->chosenOption = 0; }
+				if(me->chosenOption > 3) { me->chosenOption = 0; }
 				break;
 			case 27:
 				// Appui sur ESC
@@ -77,8 +77,8 @@ void updateMenuEdition(MenuEdition* me) {
 			default: 
 				break;
 		}
+
 		
 		drawMenuEdition(me);
-	}
-	
+	}	
 }

@@ -68,9 +68,11 @@ void displayMenu(Menu* m) {
 				break;
 			case 27:
 				toggleMenu(m);
+				break;
 			case 10:
 				m->validatedOption = m->chosenOption;
 				toggleMenu(m);
+				break;
 			default:
 				break;
 		}	

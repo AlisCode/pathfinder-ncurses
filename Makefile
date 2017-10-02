@@ -9,11 +9,11 @@ src/pathfindermath.o: src/pathfindermath.c src/pathfindermath.h src/pathfindingn
 src/map.o: src/map.c src/map.h
 src/casemap.o: src/casemap.c src/casemap.h
 src/menu.o: src/menu.c src/menu.h
-src/mapwindow.o: src/mapwindow.c src/mapwindow.h src/map.h src/menuedition.h
+src/mapwindow.o: src/mapwindow.c src/mapwindow.h src/map.h src/menuedition.h src/stateview.h
 src/menuedition.o: src/menuedition.c src/menuedition.h
 src/pathfindingnode.o: src/pathfindingnode.c src/pathfindingnode.h src/pathfindermath.h
 src/pathfinding.o: src/pathfinding.c src/pathfinding.h src/map.h src/pathfindingnode.h src/pathfindermath.h
 src/stateview.o: src/stateview.c src/stateview.h
 
 clean:
-	rm -rf src/main src/*.o
+	rm -rf src/main src/*.o out

@@ -65,16 +65,13 @@ int main(int argc, char* argv[]) {
 		clear();
 		refresh();
 		drawMapWindow(&mapWindow);
-		updateMapWindow(&mapWindow);	
+		updateMapWindow(&mapWindow, &stateView);	
 		updateStateView(&stateView, "VISUAL - m to open menu");	
 		int userInput = getch();
 		switch(userInput) {
 			case 'm':
 				updateStateView(&stateView, "ESC to close");
 				toggleMenu(&menu);
-				break;
-			case 'o':	
-				map = loadMap("test.map");
 				break;
 			default: 
 				// Appui sur une touche non gérée

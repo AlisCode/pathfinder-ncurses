@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "mapwindow.h"
+#include "stateview.h"
 #include <ncurses.h>
 
 MapWindow createMapWindow(int maxX, int maxY) {
@@ -39,10 +40,11 @@ void drawMapWindow(MapWindow* mw) {
 	wrefresh(mw->window);
 }
 
-void updateMapWindow(MapWindow* mw) {
+void updateMapWindow(MapWindow* mw, StateView* sv) {
 	
 	while(mw->editMode == 1) 
 	{
+		updateStateView(sv, "Edit Mode - e to change bloc, space to place");
 		keypad(mw->window, TRUE);
 		int input = wgetch(mw->window);
 		keypad(mw->window, FALSE);
