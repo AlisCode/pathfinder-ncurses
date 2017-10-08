@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include <form.h>
 #include "casemap.h"
 #include "map.h"
 #include "menu.h"
@@ -12,8 +13,12 @@
 void actionMenu(int opt);
 
 int running = 0;
+int dontUpdateStateView = 0;
+Map newMap;
+
 MapWindow mapWindow;
 StateView stateView;
+LoadWindow loadWindow;
 
 int main(int argc, char* argv[]) {
 	
@@ -60,6 +65,9 @@ int main(int argc, char* argv[]) {
 	// Crée la StateView
 	stateView = createStateView(maxX, maxY);
 
+	// Crée la LoadWindow
+	loadWindow = createLoadWindow(maxX, maxY);
+
 	// Boucle principale
 	running = 1;
 	while(running == 1) {
@@ -67,16 +75,24 @@ int main(int argc, char* argv[]) {
 		refresh();
 		drawMapWindow(&mapWindow);
 		updateMapWindow(&mapWindow, &stateView);	
-		updateStateView(&stateView, "VISUAL - m to open menu");	
+
+		if(dontUpdateStateView == 1)
+		{
+			displayState(stateView);
+			dontUpdateStateView = 0;
+		}
+		else {
+			updateStateView(&stateView, "VISUAL - m to open menu");	
+		}
 		int userInput = getch();
 		switch(userInput) {
 			case 'm':
-				updateStateView(&stateView, "ESC to close");
-				toggleMenu(&menu);
-				break;
+			updateStateView(&stateView, "ESC to close");
+			toggleMenu(&menu);
+			break;
 			default: 
-				// Appui sur une touche non gérée
-				break;	
+			// Appui sur une touche non gérée
+			break;	
 		}
 
 		actionMenu(menu.validatedOption); 
@@ -105,11 +121,17 @@ void actionMenu(int opt) {
 			break;
 		// Load 
 		case 2:
+			post_form(loadWindow.formLoading);
+			popupWindowLoading(&loadWindow);
+			unpost_form(loadWindow.formLoading);
+			newMap = loadMap(loadWindow.mapName);
+			replaceMap(&mapWindow, newMap);
 			break;
 		// Resolve
 		case 3:
 			normalizeMap(&mapWindow.map);
-			resolvePath(mapWindow.map);
+			resolvePath(mapWindow.map, &stateView);
+			dontUpdateStateView = 1;
 			break;
 		// Quit
 		case 4:

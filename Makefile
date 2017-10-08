@@ -12,7 +12,7 @@ src/menu.o: src/menu.c src/menu.h
 src/mapwindow.o: src/mapwindow.c src/mapwindow.h src/map.h src/menuedition.h src/stateview.h
 src/menuedition.o: src/menuedition.c src/menuedition.h
 src/pathfindingnode.o: src/pathfindingnode.c src/pathfindingnode.h src/pathfindermath.h
-src/pathfinding.o: src/pathfinding.c src/pathfinding.h src/map.h src/pathfindingnode.h src/pathfindermath.h
+src/pathfinding.o: src/pathfinding.c src/pathfinding.h src/map.h src/pathfindingnode.h src/pathfindermath.h src/stateview.h
 src/stateview.o: src/stateview.c src/stateview.h
 src/loadwindow.o: src/loadwindow.c src/loadwindow.h
 

@@ -22,5 +22,7 @@ struct loadWindow {
 
 LoadWindow createLoadWindow(int maxX, int maxY);
 void freeLoadWindow(LoadWindow lw);
+void drawLoadWindow(LoadWindow* lw);
+void popupWindowLoading(LoadWindow* lw);
 
 #endif

@@ -3,6 +3,7 @@
 #include "map.h"
 #include "casemap.h"
 #include "pathfindermath.h"
+#include "stateview.h"
 
 PathfindingNodeList findPath(Map m) {
 
@@ -54,15 +55,13 @@ PathfindingNodeList findPath(Map m) {
 
 }
 
-void resolvePath(Map m) {
+void resolvePath(Map m, StateView* sv) {
 
-	fprintf(stderr, "recherche de chemin \n");
 	// Résouds le chemin
 	PathfindingNodeList pnl = findPath(m);
-	fprintf(stderr, "chemin trouvé \n");
 
 	// Si on a trouvé une solution
-    	if(pnl.taille != 0)
+    if(pnl.tailleUtilisee != 0)
 	{
 		int i; 
 		// On parcourt tout le tableau (sauf la dernière et la première case)
@@ -93,9 +92,11 @@ void resolvePath(Map m) {
 				}
 			}
 		}
+		updateStateView(sv, "Chemin trouve !");
 	}
 	else {
 		// sinon, on affiche qu'on a eu une erreur 	
+		updateStateView(sv, "Aucun chemin trouve :(");
 	}
 }
 
