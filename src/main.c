@@ -7,6 +7,7 @@
 #include "mapwindow.h"
 #include "pathfinding.h"
 #include "stateview.h"
+#include "loadwindow.h"
 
 void actionMenu(int opt);
 
