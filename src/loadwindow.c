@@ -16,6 +16,7 @@ LoadWindow createLoadWindow(int maxX, int maxY) {
 	lwindow.width = 0;
 	lwindow.height = 0;
 
+	lwindow.fields = calloc(2,sizeof(FIELD *));
 	lwindow.fields[0] = new_field(1,15, 3, 2, 0, 0);
 	lwindow.fields[1] = NULL;
 
@@ -43,7 +44,7 @@ void popupWindowLoading(LoadWindow* lw) {
 
 	post_form(lw->formLoading);	
 	drawLoadWindow(lw);
-	
+
 	int ch;
 	// Tourne tant qu'on a pas appuyé sur entrée
 	while((ch = getch()) != 10) {
@@ -64,6 +65,8 @@ void popupWindowLoading(LoadWindow* lw) {
 	
 	char* buf = field_buffer(lw->fields[0], 0);
 	strcpy(lw->mapName, buf);
+	
+	unpost_form(lw->formLoading);
 }
 
 

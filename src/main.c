@@ -122,7 +122,6 @@ void actionMenu(int opt) {
 		// Load 
 		case 2:
 			popupWindowLoading(&loadWindow);
-			unpost_form(loadWindow.formLoading);
 			newMap = loadMap(loadWindow.mapName);
 			replaceMap(&mapWindow, newMap);
 			break;

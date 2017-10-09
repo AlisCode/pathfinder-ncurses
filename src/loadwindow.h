@@ -11,7 +11,7 @@ struct loadWindow {
 	char* mapName;
 
 	WINDOW* window;	
-	FIELD* fields[2];
+	FIELD** fields;
 	FORM* formLoading;
 
 	int x;
