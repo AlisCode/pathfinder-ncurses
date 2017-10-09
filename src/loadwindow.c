@@ -9,6 +9,13 @@ LoadWindow createLoadWindow(int maxX, int maxY) {
 	LoadWindow lwindow;
 
 	lwindow.window = newwin(5,25,1,1);
+	lwindow.mapName = "";
+	
+	lwindow.x = 0;
+	lwindow.y = 0;
+	lwindow.width = 0;
+	lwindow.height = 0;
+
 	lwindow.fields[0] = new_field(1,15, 3, 2, 0, 0);
 	lwindow.fields[1] = NULL;
 
@@ -19,9 +26,6 @@ LoadWindow createLoadWindow(int maxX, int maxY) {
 	set_form_win(lwindow.formLoading, stdscr);
 	set_form_sub(lwindow.formLoading, lwindow.window);
 	
-	post_form(lwindow.formLoading);
-	unpost_form(lwindow.formLoading);
-
 	return lwindow;
 }
 
@@ -36,7 +40,8 @@ void drawLoadWindow(LoadWindow* lw) {
 
 // Lance la fenêtre pour le chargement de carte
 void popupWindowLoading(LoadWindow* lw) {
-	
+
+	post_form(lw->formLoading);	
 	drawLoadWindow(lw);
 	
 	int ch;
@@ -61,6 +66,7 @@ void popupWindowLoading(LoadWindow* lw) {
 	strcpy(lw->mapName, buf);
 }
 
+
 // Libère la mémoire prise pour la fenêtre de chargement
 void freeLoadWindow(LoadWindow lw) {
 
@@ -68,3 +74,4 @@ void freeLoadWindow(LoadWindow lw) {
 	free_field(lw.fields[0]);
 	delwin(lw.window);
 }
+

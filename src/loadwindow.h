@@ -8,7 +8,7 @@ typedef struct loadWindow LoadWindow;
 
 struct loadWindow {
 
-	char mapName[15];
+	char* mapName;
 
 	WINDOW* window;	
 	FIELD* fields[2];
