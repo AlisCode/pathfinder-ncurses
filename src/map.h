@@ -1,6 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 #include "casemap.h"
+#include "stateview.h"
 #include <ncurses.h>
 
 typedef struct map Map;
@@ -14,7 +15,7 @@ struct map {
 
 Map createMap(char* name, int w, int h);
 void saveMap(Map m);
-Map loadMap(char* filename);
+Map loadMap(char* filename, StateView* sv);
 void displayMap(Map m, int cursorX, int cursorY, WINDOW* win);
 void addCase(Map* m, CaseMap cm);
 void normalizeMap(Map* m);

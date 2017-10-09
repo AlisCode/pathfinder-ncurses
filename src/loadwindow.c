@@ -2,14 +2,18 @@
 #include <form.h>
 #include <ncurses.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+#define LONGUEUR_NOM_CARTE 15
 
 // Crée la fenêtre de chargement
 LoadWindow createLoadWindow(int maxX, int maxY) {
 
 	LoadWindow lwindow;
 
-	lwindow.window = newwin(5,25,1,1);
-	lwindow.mapName = "";
+	lwindow.window = newwin(5,LONGUEUR_NOM_CARTE+10, maxY/2 - 2, maxX/2 - (LONGUEUR_NOM_CARTE+10)/2);
+	lwindow.mapName = malloc(sizeof(char) * LONGUEUR_NOM_CARTE + 4);
 	
 	lwindow.x = 0;
 	lwindow.y = 0;
@@ -17,7 +21,7 @@ LoadWindow createLoadWindow(int maxX, int maxY) {
 	lwindow.height = 0;
 
 	lwindow.fields = calloc(2,sizeof(FIELD *));
-	lwindow.fields[0] = new_field(1,15, 3, 2, 0, 0);
+	lwindow.fields[0] = new_field(1, LONGUEUR_NOM_CARTE, 3, 2, 0, 0);
 	lwindow.fields[1] = NULL;
 
 	set_field_back(lwindow.fields[0], A_UNDERLINE); 	
@@ -64,7 +68,11 @@ void popupWindowLoading(LoadWindow* lw) {
 	form_driver(lw->formLoading, REQ_NEXT_FIELD);
 	
 	char* buf = field_buffer(lw->fields[0], 0);
+	trimwhitespace(buf);
 	strcpy(lw->mapName, buf);
+	strcat(lw->mapName, ".map");
+
+	fprintf(stderr, "%s", lw->mapName);
 	
 	unpost_form(lw->formLoading);
 }
@@ -78,3 +86,25 @@ void freeLoadWindow(LoadWindow lw) {
 	delwin(lw.window);
 }
 
+// Fonction utilitaire qui retire les espaces d'une chaîne de caractère modifiable
+// (Oui, c'est copié sur internet)
+// Source : https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way
+char *trimwhitespace(char *str)
+{
+  char *end;
+
+  // Trim leading space
+  while(isspace((unsigned char)*str)) str++;
+
+  if(*str == 0)  // All spaces?
+    return str;
+
+  // Trim trailing space
+  end = str + strlen(str) - 1;
+  while(end > str && isspace((unsigned char)*end)) end--;
+
+  // Write new null terminator
+  *(end+1) = 0;
+
+  return str;
+}

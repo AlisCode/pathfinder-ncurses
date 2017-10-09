@@ -25,6 +25,14 @@ int main(int argc, char* argv[]) {
 	// Nombre de lignes et colonnes du terminal
 	int maxX = 0;
 	int maxY = 0;
+	
+	// Initialise ncurses
+	initscr();
+	noecho();
+	cbreak();
+	curs_set(FALSE);
+	getmaxyx(stdscr, maxY, maxX);
+	refresh();
 
 	// Crée la map	
 	Map map;
@@ -34,19 +42,14 @@ int main(int argc, char* argv[]) {
 	}
 	
 	if(argc == 2) {	
-		map = loadMap(argv[1]);		
+		map = loadMap(argv[1], &stateView);		
 	} 
 	else if(argc == 1) {
 		map = createMap("default.map", 10, 10);
 	}
-	
-	// Initialise ncurses
-	initscr();
-	noecho();
-	cbreak();
-	curs_set(FALSE);
-	getmaxyx(stdscr, maxY, maxX);
-	refresh();
+
+	// Crée la StateView
+	stateView = createStateView(maxX);
 
 	// Initialise les couleurs
 	start_color();
@@ -61,9 +64,6 @@ int main(int argc, char* argv[]) {
 	
 	// Crée le menu
 	Menu menu = createMenu(maxX, maxY);
-
-	// Crée la StateView
-	stateView = createStateView(maxX, maxY);
 
 	// Crée la LoadWindow
 	loadWindow = createLoadWindow(maxX, maxY);
@@ -122,8 +122,9 @@ void actionMenu(int opt) {
 		// Load 
 		case 2:
 			popupWindowLoading(&loadWindow);
-			newMap = loadMap(loadWindow.mapName);
+			newMap = loadMap(loadWindow.mapName, &stateView);
 			replaceMap(&mapWindow, newMap);
+			dontUpdateStateView = 1;
 			break;
 		// Resolve
 		case 3:

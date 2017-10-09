@@ -20,8 +20,8 @@ MenuEdition createMenuEdition(int maxX, int maxY) {
 	me.window = newwin(
 		MENUEDITION_HEIGHT,
 		MENUEDITION_WIDTH,
-		0,
-		0
+		maxY/2 - MENUEDITION_HEIGHT/2,
+		maxX/2 - MENUEDITION_WIDTH/2
 	);
 	
 	me.visible = 0;
@@ -59,11 +59,11 @@ void updateMenuEdition(MenuEdition* me) {
 		switch(choice) {
 			case KEY_UP:
 				me->chosenOption--;
-				if(me->chosenOption < 0) { me->chosenOption = 4; }
+				if(me->chosenOption < 0) { me->chosenOption = 3; }
 				break;
 			case KEY_DOWN:
 				me->chosenOption++;
-				if(me->chosenOption > 3) { me->chosenOption = 0; }
+				if(me->chosenOption >= 4) { me->chosenOption = 0; }
 				break;
 			case 27:
 				// Appui sur ESC

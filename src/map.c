@@ -4,6 +4,7 @@
 #include "map.h"
 #include "casemap.h"
 #include "pathfindermath.h"
+#include "stateview.h"
 
 // Crée une carte à partir de son nom, sa taille (Width, Height)
 Map createMap(char* name, int w, int h) {
@@ -76,11 +77,13 @@ void saveMap(Map m) {
 }
 
 // Charge une carte dans l'application
-Map loadMap(char* filename) {
+Map loadMap(char* filename, StateView* sv) {
 	FILE* fichier = fopen(filename, "r");
 	if(fichier == NULL) {
-		fprintf(stderr, "Erreur lors de l'ouverture du fichier de la map");
-		exit(1);
+		updateStateView(sv, "No map found, starting from scratch");
+		Map m = createMap(filename, 10,10);
+
+		return m;
 	}
 
 	int width;

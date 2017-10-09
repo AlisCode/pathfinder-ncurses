@@ -2,7 +2,7 @@
 #include <ncurses.h>
 
 // Crée la StateView
-StateView createStateView(int maxX, int maxY) {
+StateView createStateView(int maxX) {
 	
 	StateView sv;
 

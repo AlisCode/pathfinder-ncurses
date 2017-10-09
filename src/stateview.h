@@ -20,7 +20,7 @@ struct stateView {
 
 };
 
-StateView createStateView(int maxX, int maxY);
+StateView createStateView(int maxX);
 void updateStateView(StateView* sv, char* newText);
 void displayState(StateView sv);
 
