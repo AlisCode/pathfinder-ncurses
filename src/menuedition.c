@@ -2,10 +2,11 @@
 #include "casemap.h"
 #include <ncurses.h>
 
+// Longueur et largeur du menu
 #define MENUEDITION_WIDTH 15
 #define MENUEDITION_HEIGHT 8
 
-
+// Tableau contenant les cases plaçables par l'utilisateur
 char* optionsEdition[4] = {
 	"Mur     X",
 	"Vide    .",
@@ -13,6 +14,7 @@ char* optionsEdition[4] = {
 	"Arrivee A"
 };
 
+// Crée le menu d'édition, et le centre
 MenuEdition createMenuEdition(int maxX, int maxY) {
 	
 	MenuEdition me;
@@ -31,6 +33,7 @@ MenuEdition createMenuEdition(int maxX, int maxY) {
 	return me;
 }
 
+// Affiche la fenêtre du menu d'édition
 void drawMenuEdition(MenuEdition* me) {
 	wclear(me->window);
 	box(me->window, 0, 0);	
@@ -49,6 +52,7 @@ void drawMenuEdition(MenuEdition* me) {
 	wrefresh(me->window);
 }
 
+// Met à jour le menu d'édition (en fonction des input utilisateur)
 void updateMenuEdition(MenuEdition* me) {
 	
 	while(me->visible == 1) {

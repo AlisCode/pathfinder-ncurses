@@ -133,6 +133,8 @@ void addCase(Map* m, CaseMap cm) {
 	m->cases[index] = cm;
 }
 
+// Retire les flags CHEMIN pour les remplacer par des flags VIDE.
+// "normalise" la map, dans le sens où elle est désormais propre à l'utilisation
 void normalizeMap(Map* m) {
 	int x, y;
 	for(x = 1 ; x <= m->width ; x++) 

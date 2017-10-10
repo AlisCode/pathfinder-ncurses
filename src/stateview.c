@@ -23,6 +23,7 @@ StateView createStateView(int maxX) {
 }
 
 // Change le texte présent dans la stateView
+// Change aussi les coordonées d'affichage de sorte à centrer le texte dans la fenêtre
 void updateStateView(StateView* sv, char* newText) {
 
 	// Détermine la taille du texte pour le centrer de façon adéquate
@@ -50,7 +51,7 @@ void updateStateView(StateView* sv, char* newText) {
 	displayState(*sv);
 }
 
-// Affiche la nouvelle stateView
+// Affiche la StateView en centrant le texte 
 void displayState(StateView sv) {
 	wclear(sv.window);
 	box(sv.window, 0 , 0);

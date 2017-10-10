@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <stdio.h>
 
+// Options utilisables dans le menu
 char* options[5] = {
 	"edit",
 	"save",
@@ -79,6 +80,7 @@ void displayMenu(Menu* m) {
 	}	
 }
 
+// Supprime la fenêtre (cleanup)
 void deleteMenu(Menu m) {
 	delwin(m.window);
 }

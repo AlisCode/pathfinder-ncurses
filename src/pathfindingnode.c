@@ -2,6 +2,7 @@
 #include "pathfindermath.h"
 #include <stdlib.h>
 
+// Définit le code d'erreur, si on fait un dépassement de mémoire durant l'algorithme de recherche
 #define PLACE_MEMOIRE 2
 
 // FONCTIONS UTILITAIRES POUR LES PATHFINDINGNODE

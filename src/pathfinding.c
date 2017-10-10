@@ -5,23 +5,30 @@
 #include "pathfindermath.h"
 #include "stateview.h"
 
+
+// Fonction permettant de trouver le chemin entre le point d'arrivée et le point de départ de la map donnée
+// Retourne une PathfindingNodeList vide si aucun chemin n'a été trouvé
 PathfindingNodeList findPath(Map m) {
 
+	// Récupère le point de départ et d'arrivée
     CaseMap* startCm = getStartingPoint(m);
     CaseMap* endCm = getEndingPoint(m);
     
+	// S'il en manque un
     if(startCm == NULL || endCm == NULL)
     {
-        fprintf(stderr, "Erreur : pas de point d'arrivée et de départ trouvé !");
         return createPathfindingNodeList();
     }
 
+	// Crée le noeud de départ et le noeud d'arrivée
     PathfindingNode* startPn = createNodeFromCaseMap(startCm);
     PathfindingNode* endPn = createNodeFromCaseMap(endCm);
 
+	// Crée la liste de noeuds ouverts et fermés ( A* )
     PathfindingNodeList openList = createPathfindingNodeList();
     PathfindingNodeList closedList = createPathfindingNodeList();
 
+	// Ajoute le point de départ à la liste ouverte
     addToNodeList(&openList, startPn);
     int tourBoucle = 1;
     while(openList.tailleUtilisee > 0) {
@@ -55,6 +62,9 @@ PathfindingNodeList findPath(Map m) {
 
 }
 
+// Fonction permettant de gérer la résolution du chemin
+// Affiche le chemin en cas de succès
+// Affiche l'erreur s'il y en a une  
 void resolvePath(Map m, StateView* sv) {
 
 	// Résouds le chemin
@@ -92,6 +102,8 @@ void resolvePath(Map m, StateView* sv) {
 				}
 			}
 		}
+
+		// Met à jour la StateView
 		updateStateView(sv, "Chemin trouve !");
 	}
 	else {
@@ -100,6 +112,8 @@ void resolvePath(Map m, StateView* sv) {
 	}
 }
 
+// Fonction permettant de reconstruire le chemin à partir du dernier PathfindingNode (en remontant dans les parents)
+// Retourne une PathfindingNodeList si il n'y'a pas eu d'erreur
 PathfindingNodeList constructPath(PathfindingNode* end) {
 
     PathfindingNodeList path = createPathfindingNodeList();
@@ -114,6 +128,7 @@ PathfindingNodeList constructPath(PathfindingNode* end) {
     return path;
 }
 
+// Ajoute les noeuds voisin du noeud actuel dans la liste ouverte
 void addNeighbours(PathfindingNodeList* openList, PathfindingNodeList* closedList, PathfindingNode* pn, Map m) {
 
     	// Ajoute le voisin gauche
@@ -130,7 +145,7 @@ void addNeighbours(PathfindingNodeList* openList, PathfindingNodeList* closedLis
     
 }
 
-
+// Ajoute le noeud voisin à pn dans la liste ouverte, en fonction de l'offset X/Y donné, si le noeud existe et qu'il n'est pas ni dans la liste ouverte, ni dans la liste fermée
 void addNeighbour(PathfindingNodeList* openList, PathfindingNodeList* closedList, Map m, int offsetX, int offsetY, PathfindingNode* pn) {
 	int nx = pn->x + offsetX; 
     	int ny = pn->y + offsetY;
@@ -146,4 +161,3 @@ void addNeighbour(PathfindingNodeList* openList, PathfindingNodeList* closedList
 		}
    	 }
 }
-

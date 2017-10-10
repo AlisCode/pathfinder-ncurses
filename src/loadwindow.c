@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+// La longueur maximale du nom des cartes (extension .map non comprise)
 #define LONGUEUR_NOM_CARTE 15
 
 // Crée la fenêtre de chargement

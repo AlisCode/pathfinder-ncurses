@@ -3,6 +3,7 @@
 #include "stateview.h"
 #include <ncurses.h>
 
+// Crée la MapWindow
 MapWindow createMapWindow(int maxX, int maxY) {
 	MapWindow mw;
 	
@@ -16,10 +17,13 @@ MapWindow createMapWindow(int maxX, int maxY) {
 	return mw;	
 }
 
+// Remplace la map dans la fenêtre
 void replaceMap(MapWindow* mw, Map m) {
 	mw->map = m;
 }
 
+// Change le mode du programme en mode "édition". 
+// Place également le curseur en haut à gauche
 void switchToEditMode(MapWindow* mw) {
 	mw->cursorX = 1;
 	mw->cursorY = 1;
@@ -27,12 +31,15 @@ void switchToEditMode(MapWindow* mw) {
 	drawMapWindow(mw);
 }
 
+// Change le mode du programme en mode "visuel"
+// Reset aussi le cursor (bug: cursor visible à fixer)
 void switchToNormalMode(MapWindow* mw) {
 	mw->cursorX = 0;
 	mw->cursorY = 0;
 	mw->editMode = 0;
 }	
 
+// Affiche la fenêtre contenant la carte
 void drawMapWindow(MapWindow* mw) {
 	wclear(mw->window);
 	box(mw->window, 0, 0);
@@ -40,6 +47,7 @@ void drawMapWindow(MapWindow* mw) {
 	wrefresh(mw->window);
 }
 
+// Met à jour la fenêtre contenant la carte
 void updateMapWindow(MapWindow* mw, StateView* sv) {
 	
 	while(mw->editMode == 1) 

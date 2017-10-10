@@ -12,14 +12,22 @@
 
 void actionMenu(int opt);
 
+// Variables globales
+// Si l'application est lancée ou non
 int running = 0;
+
+// Si l'on doit mettre à jour la stateview
 int dontUpdateStateView = 0;
+
+// Map "buffer" - peut être retirée (à refactoriser ...)
 Map newMap;
 
+// Fenêtres globales
 MapWindow mapWindow;
 StateView stateView;
 LoadWindow loadWindow;
 
+// Point d'entrée du programme
 int main(int argc, char* argv[]) {
 	
 	// Nombre de lignes et colonnes du terminal
@@ -103,10 +111,12 @@ int main(int argc, char* argv[]) {
 	deleteMenu(menu);
 	endwin();	
 	freeMap(&map);
+	freeLoadWindow(loadWindow);
 
 	return 0;
 }
 
+// Gère les actions du menu après choix de l'utilisateur
 void actionMenu(int opt) {
 
 	switch(opt) {
